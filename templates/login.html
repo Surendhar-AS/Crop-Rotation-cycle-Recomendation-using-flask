@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+<style>
+body {
+  background-image: url("/static/wp1.jpg");
+  background-size: cover;
+}
+
+.form-box{
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 800px;
+height: 600px;
+border-radius: 15px;
+background: #0f4294;
+text-align: center;
+font-family: "Bangers", cursive;
+color: #60cf38; 
+opacity: 0.5;
+}
+.form-box1{
+position: absolute;
+top: 78%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 200px;
+height: 190px;
+border-radius: 15px;
+background: #e2f22e;
+text-align: center;
+font-family: "Bangers", cursive;
+color:black; 
+overflow:auto;
+}
+
+.input-field {
+  width: 40%; 
+  padding: 10px; 
+  background: #C2D58C;
+  border: none;
+  border-radius: 6px;
+  color: black;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-left: 35px;
+  
+}
+
+.input-field::placeholder {
+  color: black; 
+  font-weight: bold;
+  font-family:"Abel", cursive;
+}
+
+.a {
+  width: 40%; 
+  padding: 10px; 
+  background: linear-gradient(to right,#fa0202,#7afa02);
+  border: none;
+  border-radius: 15px;
+  opacity: 13;
+  color: #05fff7;
+  font-weight: bold;
+  font-family:"Ubuntu", cursive;
+  margin-top: 20px;
+  margin-left: 50px;
+  transition: width 0.3s, background-color 0.3s;
+  font-size: 17px;
+}
+
+.a:hover,
+.a:active {
+  transform: scaleX(1.67);
+  background-color: red;
+  cursor: pointer;
+}
+
+
+
+</style>
+</head>
+<body>
+    <div class="form-box">
+        <form id="login" class="input-group">
+            <h1>Crop rotation cycle</h1>
+            <input class="input-field" placeholder="Soil Type" name="st" required>
+            <input class="input-field" placeholder="pH" name="ph" required>
+            <input class="input-field" placeholder="Nitrogen (N) ppm" name="N" required>
+            <input class="input-field" placeholder="Potassium (K) ppm" name="K" required>
+            <input class="input-field" placeholder="Phosphorus (P) ppm" name="P" required>
+            <input class="input-field" placeholder="Starting Season" name="S" required>
+            <input class="input-field" placeholder="number of crop in rotation" name="Nc" required>
+            <input class="input-field" placeholder="Duration (Months)" name="Mon" required><br>
+            <button type="submit" class="a">Predict Crop Cycle</button>
+        </form>
+        <div class="form-box1" id="output">
+          <h3>Crop rotation cycle</h3>
+            <!-- Display captured values here -->
+        </div>
+    </div>
+
+    <script>
+      document.getElementById('login').addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          var form = document.getElementById('login');
+          var formData = new FormData(form);
+
+          fetch('/submit', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              var outputDiv = document.getElementById('output');
+              outputDiv.innerHTML = '<h3>Crop rotation cycle</h3>';
+              var ul = document.createElement('ul');
+              data.PredictedCrops.forEach(function(crop) {
+                  var li = document.createElement('li');
+                  li.textContent = crop;
+                  ul.appendChild(li);
+              });
+              outputDiv.appendChild(ul);
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      });
+  </script>
+</body>
+</html>
